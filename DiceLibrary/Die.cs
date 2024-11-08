@@ -124,13 +124,35 @@
 		}
 		#endregion
 
+		#region Parse Methods
+		public static Die Parse(string s) {
+			string[] values = s.Split(':');
+
+			if (values.Length != 3) {
+				throw new FormatException($"Parameter {s} was not in the right format.");
+			}
+			
+			int size = int.Parse(values[0]);
+
+			int[] faces = new int[size];
+			string[] faceValues = values[1].Split(',');
+			for (int i = 0; i < size; i++) {
+				faces[i] = int.Parse(faceValues[i]);
+			}
+
+			int seed = int.Parse(values[2]);
+
+			return new CustomDie(faces, seed);
+		}
+		#endregion
+
 		#region Abstract Methods
 		protected abstract void SetUpFaces();
 		#endregion
 
 		#region Method Overrides
 		public override string ToString() {
-			return $"{Size}:[{string.Join(',', Faces)}]:{Seed}";
+			return $"{Size}:{string.Join(',', Faces)}:{Seed}";
 		}
 		#endregion
 	}
