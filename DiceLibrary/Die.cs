@@ -158,7 +158,7 @@
 		}
 
 		/// <summary>
-		///		<para>Rolls the current <see cref="Die"/> instance, rerolling once if instance doesn't roll higher than <paramref name="value"/>.</para>
+		///		<para>Rolls the current <see cref="Die"/> instance, rerolling once if the instance doesn't roll higher than <paramref name="value"/>.</para>
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns>
