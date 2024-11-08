@@ -9,6 +9,8 @@ A small library consisting of a couple of classes for the handling dice and dice
 
 ## Code Example
 ```cs
+using DiceLibrary;
+
 Die d20 = new D(20);
 Dice damageDice = [new D(6), new D(6)];
 int modifier = 5;
