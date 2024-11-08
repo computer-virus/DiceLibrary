@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiceLibrary", "DiceLibrary\DiceLibrary.csproj", "{BEC17B12-1AA5-4758-9C93-C8BD6EE3BFED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DiceLibrary", "DiceLibrary\DiceLibrary.csproj", "{BEC17B12-1AA5-4758-9C93-C8BD6EE3BFED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiceTest", "DiceTest\DiceTest.csproj", "{2B921AC7-0BC0-4A22-B4A0-9BADFA598BAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{BEC17B12-1AA5-4758-9C93-C8BD6EE3BFED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEC17B12-1AA5-4758-9C93-C8BD6EE3BFED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEC17B12-1AA5-4758-9C93-C8BD6EE3BFED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B921AC7-0BC0-4A22-B4A0-9BADFA598BAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B921AC7-0BC0-4A22-B4A0-9BADFA598BAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B921AC7-0BC0-4A22-B4A0-9BADFA598BAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B921AC7-0BC0-4A22-B4A0-9BADFA598BAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
