@@ -103,6 +103,49 @@
 		}
 		#endregion
 
+		#region Parse Methods
+		/// <summary>
+		///		<para>Converts a <see cref="string"/>[] representation of a dice list to its <see cref="Dice"/> equivalent.</para>
+		/// </summary>
+		/// <param name="s"></param>
+		/// <returns>
+		///		<para>A <see cref="Dice"/> equivalent to the dice list contained in <paramref name="s"/>.</para>
+		/// </returns>
+		/// <exception cref="ArgumentNullException"></exception>
+		public static Dice Parse(string[] s) {
+			ArgumentNullException.ThrowIfNull(s, $"Parameter {nameof(s)} cannot be null.");
+
+			Dice dice = [];
+
+			foreach (string die in s) {
+				dice.Add(Die.Parse(die));
+			}
+
+			return dice;
+		}
+
+		/// <summary>
+		///		<para>Converts a <see cref="string"/> representation of a dice list to its <see cref="Dice"/> equivalent.</para>
+		/// </summary>
+		/// <param name="s"></param>
+		/// <returns>
+		///		<para>A <see cref="Dice"/> equivalent to the dice list contained in <paramref name="s"/>.</para>
+		/// </returns>
+		/// <exception cref="ArgumentNullException"></exception>
+		public static Dice Parse(string s) {
+			ArgumentNullException.ThrowIfNull(s, $"Parameter {nameof(s)} cannot be null.");
+			string[] lines = s.Split(Environment.NewLine);
+
+			Dice dice = [];
+
+			foreach (string die in lines) {
+				dice.Add(Die.Parse(die));
+			}
+
+			return dice;
+		}
+		#endregion
+
 		#region Method Overrides
 		/// <summary>
 		///		<para>Returns a <see cref="string"/> representation of the current <see cref="Dice"/> instance.</para>
