@@ -23,7 +23,7 @@ Console.WriteLine(toHit);
 Console.WriteLine(damage);
 
 int toHitAdv = d20.Advantage() + modifier + proficiency;
-int damageReRoll1s = damageDice.ReRoll(1) + modifier;
+int damageReRoll1s = damageDice.ReRoll(1).Sum() + modifier;
 
 Console.WriteLine(toHitAdv);
 Console.WriteLine(damageReRoll1s);
