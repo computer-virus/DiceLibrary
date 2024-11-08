@@ -1,6 +1,6 @@
 ﻿namespace DiceLibrary {
 	public class Dice : List<Die> {
-		#region Methods
+		#region Roll Methods
 		public List<int> Roll() {
 			List<int> rolls = [];
 
@@ -51,6 +51,12 @@
 			}
 
 			return rolls;
+		}
+		#endregion
+
+		#region Method Overrides
+		public override string ToString() {
+			return string.Join(Environment.NewLine, this);
 		}
 		#endregion
 	}

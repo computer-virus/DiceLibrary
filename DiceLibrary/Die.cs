@@ -132,7 +132,7 @@
 
 		#region Method Overrides
 		public override string ToString() {
-			return $"Die ({Size}): [{string.Join(',', Faces)}]";
+			return $"{Size}:[{string.Join(',', Faces)}]:{Seed}";
 		}
 		#endregion
 	}
