@@ -1,9 +1,13 @@
 ﻿namespace DiceLibrary {
 	public class D : Die {
 		#region Constructors
-		public D(int size) : base(size) { }
+		public D(int size) : base(size) {
+			SetUpFaces();
+		}
 
-		public D(int size, int seed) : base(size, seed) { }
+		public D(int size, int seed) : base(size, seed) {
+			SetUpFaces();
+		}
 		#endregion
 
 		#region Method Overrides

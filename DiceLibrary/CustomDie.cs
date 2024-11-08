@@ -1,16 +1,18 @@
 ﻿namespace DiceLibrary {
 	public class CustomDie : Die {
 		#region Properties
-		private int[] CustomFaces { get; set; } = [];
+		private int[] CustomFaces { get; set; }
 		#endregion
 
 		#region Constructors
 		public CustomDie(int[] faces) : base(faces.Length) {
 			CustomFaces = faces;
+			SetUpFaces();
 		}
 
 		public CustomDie(int[] faces, int seed) : base(faces.Length, seed) {
 			CustomFaces = faces;
+			SetUpFaces();
 		}
 		#endregion
 

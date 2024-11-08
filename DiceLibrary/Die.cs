@@ -56,19 +56,17 @@
 		protected Die(int size) {
 			Size = size;
 			Seed = new Random().Next(int.MinValue, int.MaxValue);
-			SetUpFaces();
 		}
 
 		protected Die(int size, int seed) {
 			Size = size;
 			Seed = seed;
-			SetUpFaces();
 		}
 		#endregion
 
 		#region Roll Methods
 		public int Roll() {
-			return Faces[Random.Next(Size) + 1];
+			return Faces[Random.Next(Size)];
 		}
 
 		public List<int> Roll(int times) {
