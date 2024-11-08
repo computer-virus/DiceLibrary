@@ -107,7 +107,7 @@
 			ArgumentOutOfRangeException.ThrowIfNegative(n, $"Parameter {nameof(n)} cannot be negative.");
 
 			List<int> rolls = [];
-			
+
 			for (int i = 0; i < n; i++) {
 				rolls.Add(Roll());
 			}
@@ -219,7 +219,7 @@
 			if (values.Length != 3) {
 				throw new FormatException($"Parameter {nameof(s)} was not in the right format.");
 			}
-			
+
 			int size = int.Parse(values[0]);
 
 			int[] faces = new int[size];

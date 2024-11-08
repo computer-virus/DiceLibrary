@@ -1,5 +1,4 @@
 ﻿namespace DiceLibrary {
-
 	/// <summary>
 	///		<para>Represents a rollable die with the standard arrangement of faces.</para>
 	/// </summary>
