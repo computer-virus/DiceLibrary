@@ -36,6 +36,7 @@
 		/// <returns>
 		///		<para>A <see cref="List{T}"/> of <see cref="int"/>s representing the <see langword="values"/> of the highest randomly rolled faces of the <see cref="Die"/> instances.</para>
 		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
 		public List<int> Advantage(int n) {
 			List<int> rolls = [];
 
@@ -62,6 +63,7 @@
 		/// <returns>
 		///		<para>A <see cref="List{T}"/> of <see cref="int"/>s representing the <see langword="values"/> of the lowest randomly rolled faces of the <see cref="Die"/> instances.</para>
 		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
 		public List<int> Disadvantage(int n) {
 			List<int> rolls = [];
 
@@ -79,6 +81,7 @@
 		/// <returns>
 		///		<para>A <see cref="List{T}"/> of <see cref="int"/>s representing the <see langword="values"/> of the randomly rolled faces of the <see cref="Die"/> instances.</para>
 		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
 		public List<int> ReRoll(int value) {
 			return ReRoll(value, true);
 		}
@@ -92,6 +95,7 @@
 		/// <returns>
 		///		<para>A <see cref="List{T}"/> of <see cref="int"/>s representing the <see langword="values"/> of the randomly rolled faces of the <see cref="Die"/> instances.</para>
 		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
 		public List<int> ReRoll(int value, bool once) {
 			List<int> rolls = [];
 
@@ -112,6 +116,7 @@
 		///		<para>A <see cref="Dice"/> equivalent to the dice list contained in <paramref name="s"/>.</para>
 		/// </returns>
 		/// <exception cref="ArgumentNullException"></exception>
+		/// <exception cref="FormatException"></exception>
 		public static Dice Parse(string[] s) {
 			ArgumentNullException.ThrowIfNull(s, $"Parameter {nameof(s)} cannot be null.");
 
@@ -132,6 +137,7 @@
 		///		<para>A <see cref="Dice"/> equivalent to the dice list contained in <paramref name="s"/>.</para>
 		/// </returns>
 		/// <exception cref="ArgumentNullException"></exception>
+		/// <exception cref="FormatException"></exception>
 		public static Dice Parse(string s) {
 			ArgumentNullException.ThrowIfNull(s, $"Parameter {nameof(s)} cannot be null.");
 			string[] lines = s.Split(Environment.NewLine);
