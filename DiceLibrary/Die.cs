@@ -190,6 +190,23 @@
 
 			return roll;
 		}
+
+		/// <summary>
+		///		<para>Rolls the current <see cref="Die"/> instance <paramref name="n"/> times, counting the number of rolls that met or exceeded the target <paramref name="value"/>.</para>
+		/// </summary>
+		/// <param name="n"></param>
+		/// <param name="value"></param>
+		/// <returns>
+		///		<para>An <see cref="int"/> representing the number of roll that met or exceeded the target <paramref name="value"/>.</para>
+		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		public int Target(int n, int value) {
+			ArgumentOutOfRangeException.ThrowIfNegative(n, $"Parameter {nameof(n)} cannot be negative.");
+
+			List<int> rolls = Roll(n);
+
+			return rolls.Where(x => x >= value).Count();
+		}
 		#endregion
 
 		#region List Methods

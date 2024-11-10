@@ -1,4 +1,6 @@
-﻿namespace DiceLibrary {
+﻿using static System.Runtime.InteropServices.JavaScript.JSType;
+
+namespace DiceLibrary {
 	/// <summary>
 	///		<para>Represents a <see cref="List{T}"/> of the <see cref="Die"/> class with additional functionality.</para>
 	/// </summary>
@@ -108,6 +110,25 @@
 			}
 
 			return rolls;
+		}
+
+		/// <summary>
+		///		<para>Rolls all of the <see cref="Die"/> instances of the current <see cref="Dice"/> instance <paramref name="n"/> times, counting the number of rolls that met or exceeded the target <paramref name="value"/>.</para>
+		/// </summary>
+		/// <returns>
+		///		<para>A <see cref="List{T}"/> of <see cref="int"/>s representing the number of rolls that met or exceeded the target <paramref name="value"/> for each <see cref="Die"/> instance.</para>
+		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		public List<int> Target(int n, int value) {
+			ArgumentOutOfRangeException.ThrowIfNegative(n, $"Parameter {nameof(n)} cannot be negative.");
+
+			List<int> successes = [];
+
+			foreach (Die die in this) {
+				successes.Add(die.Target(n, value));
+			}
+
+			return successes;
 		}
 		#endregion
 
