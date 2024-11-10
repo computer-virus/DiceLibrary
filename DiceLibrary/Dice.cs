@@ -38,6 +38,8 @@
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException"></exception>
 		public List<int> Advantage(int n) {
+			ArgumentOutOfRangeException.ThrowIfNegative(n, $"Parameter {nameof(n)} cannot be negative.");
+
 			List<int> rolls = [];
 
 			foreach (Die die in this) {
@@ -65,6 +67,8 @@
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException"></exception>
 		public List<int> Disadvantage(int n) {
+			ArgumentOutOfRangeException.ThrowIfNegative(n, $"Parameter {nameof(n)} cannot be negative.");
+
 			List<int> rolls = [];
 
 			foreach (Die die in this) {

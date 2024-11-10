@@ -86,6 +86,7 @@
 		#endregion
 
 		#region Roll Methods
+		#region Int Methods
 		/// <summary>
 		///		<para>Rolls the current <see cref="Die"/> instance.</para>
 		/// </summary>
@@ -94,26 +95,6 @@
 		/// </returns>
 		public int Roll() {
 			return Faces[Random.Next(Size)];
-		}
-
-		/// <summary>
-		///		<para>Rolls the current <see cref="Die"/> instance <paramref name="n"/> times.</para>
-		/// </summary>
-		/// <param name="n"></param>
-		/// <returns>
-		///		<para>A <see cref="List{T}"/> of <see cref="int"/>s representing the <see langword="values"/> of the randomly rolled faces of the current <see cref="Die"/> instance.</para>
-		/// </returns>
-		/// <exception cref="ArgumentOutOfRangeException"></exception>
-		public List<int> Roll(int n) {
-			ArgumentOutOfRangeException.ThrowIfNegative(n, $"Parameter {nameof(n)} cannot be negative.");
-
-			List<int> rolls = [];
-
-			for (int i = 0; i < n; i++) {
-				rolls.Add(Roll());
-			}
-
-			return rolls;
 		}
 
 		/// <summary>
@@ -135,6 +116,7 @@
 		///	</returns>
 		///	<exception cref="ArgumentOutOfRangeException"></exception>
 		public int Advantage(int n) {
+			ArgumentOutOfRangeException.ThrowIfNegative(n, $"Parameter {nameof(n)} cannot be negative.");
 			return Roll(n).Max();
 		}
 
@@ -157,6 +139,7 @@
 		///	</returns>
 		///	<exception cref="ArgumentOutOfRangeException"></exception>
 		public int Disadvantage(int n) {
+			ArgumentOutOfRangeException.ThrowIfNegative(n, $"Parameter {nameof(n)} cannot be negative.");
 			return Roll(n).Min();
 		}
 
@@ -169,6 +152,10 @@
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException"></exception>
 		public int ReRoll(int value) {
+			if (value >= Faces.Max()) {
+				throw new ArgumentOutOfRangeException($"Parameter {nameof(value)} cannot be greater than or equal to {nameof(Faces)} maximum value.{Environment.NewLine}{nameof(Faces)} Max Value: {Faces.Max()}");
+			}
+
 			return ReRoll(value, true);
 		}
 
@@ -203,6 +190,28 @@
 
 			return roll;
 		}
+		#endregion
+
+		#region List Methods
+		/// <summary>
+		///		<para>Rolls the current <see cref="Die"/> instance <paramref name="n"/> times.</para>
+		/// </summary>
+		/// <param name="n"></param>
+		/// <returns>
+		///		<para>A <see cref="List{T}"/> of <see cref="int"/>s representing the <see langword="values"/> of the randomly rolled faces of the current <see cref="Die"/> instance.</para>
+		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		public List<int> Roll(int n) {
+			ArgumentOutOfRangeException.ThrowIfNegative(n, $"Parameter {nameof(n)} cannot be negative.");
+
+			List<int> rolls = [];
+
+			for (int i = 0; i < n; i++) {
+				rolls.Add(Roll());
+			}
+
+			return rolls;
+		}
 
 		/// <summary>
 		///		<para>Rolls the current <see cref="Die"/> instance, rolling it an additional time each time it rolls its maximum face value.</para>
@@ -212,6 +221,10 @@
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException"></exception>
 		public List<int> Explode() {
+			if (Faces.Max() == Faces.Min()) {
+				throw new ArgumentOutOfRangeException($"Cannot exploding roll a {nameof(Die)} whose {nameof(Faces)} all have the same value.");
+			}
+
 			return Explode(Faces.Max());
 		}
 
@@ -236,6 +249,57 @@
 
 			return rolls;
 		}
+
+		/// <summary>
+		///		<para>Rolls the current <see cref="Die"/> instance <paramref name="n"/> times, only keeping the <paramref name="x"/> highest values.</para>
+		/// </summary>
+		/// <param name="n"></param>
+		/// <param name="x"></param>
+		/// <returns>
+		///		<para>A <see cref="List{T}"/> of <see cref="int"/>s representing the kept <see langword="values"/> of the randomly rolled faces of the current <see cref="Die"/> instance.</para>
+		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		public List<int> KeepHighest(int n, int x) {
+			ArgumentOutOfRangeException.ThrowIfNegative(n, $"Parameter {nameof(n)} cannot be negative.");	
+			ArgumentOutOfRangeException.ThrowIfNegative(x, $"Parameter {nameof(x)} cannot be negative.");
+			ArgumentOutOfRangeException.ThrowIfGreaterThan(x, n, $"Parameter {nameof(x)} cannot be greater than parameter {nameof(n)}.");
+
+			List<int> rolls = Roll(n);
+			List<int> highest = [];
+
+			for (int i = 0; i < x; i++) {
+				highest.Add(rolls.Max());
+				rolls.Remove(rolls.Max());
+			}
+
+			return highest;
+		}
+
+		/// <summary>
+		///		<para>Rolls the current <see cref="Die"/> instance <paramref name="n"/> times, only keeping the <paramref name="x"/> lowest values.</para>
+		/// </summary>
+		/// <param name="n"></param>
+		/// <param name="x"></param>
+		/// <returns>
+		///		<para>A <see cref="List{T}"/> of <see cref="int"/>s representing the kept <see langword="values"/> of the randomly rolled faces of the current <see cref="Die"/> instance.</para>
+		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		public List<int> KeepLowest(int n, int x) {
+			ArgumentOutOfRangeException.ThrowIfNegative(n, $"Parameter {nameof(n)} cannot be negative.");
+			ArgumentOutOfRangeException.ThrowIfNegative(x, $"Parameter {nameof(x)} cannot be negative.");
+			ArgumentOutOfRangeException.ThrowIfGreaterThan(x, n, $"Parameter {nameof(x)} cannot be greater than parameter {nameof(n)}.");
+
+			List<int> rolls = Roll(n);
+			List<int> lowest = [];
+
+			for (int i = 0; i < x; i++) {
+				lowest.Add(rolls.Min());
+				rolls.Remove(rolls.Min());
+			}
+
+			return lowest;
+		}
+		#endregion
 		#endregion
 
 		#region Parse Methods
