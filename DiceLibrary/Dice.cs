@@ -1,10 +1,25 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace DiceLibrary {
+﻿namespace DiceLibrary {
 	/// <summary>
 	///		<para>Represents a <see cref="List{T}"/> of the <see cref="Die"/> class with additional functionality.</para>
 	/// </summary>
 	public class Dice : List<Die> {
+		#region Die Population Methods
+		/// <summary>
+		///		<para>Adds <paramref name="n"/> <see langword="new"/> instances of <see cref="D"/>(<paramref name="size"/>) to the end of the current <see cref="Dice"/> instance.</para>
+		/// </summary>
+		/// <param name="n"></param>
+		/// <param name="size"></param>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		public void Add(int n, int size) {
+			ArgumentOutOfRangeException.ThrowIfNegative(n, $"Parameter {nameof(n)} cannot be negative.");
+			ArgumentOutOfRangeException.ThrowIfLessThan(size, 2, $"Parameter {nameof(size)} cannot be less than 2.");
+
+			for (int i = 0; i < n; i++) {
+				Add(new D(size));
+			}
+		}
+		#endregion
+
 		#region Roll Methods
 		/// <summary>
 		///		<para>Rolls all of the <see cref="Die"/> instances of the current <see cref="Dice"/> instance.</para>
