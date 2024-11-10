@@ -103,6 +103,7 @@
 		/// <returns>
 		///		<para>A <see cref="List{T}"/> of <see cref="int"/>s representing the <see langword="values"/> of the randomly rolled faces of the current <see cref="Die"/> instance.</para>
 		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
 		public List<int> Roll(int n) {
 			ArgumentOutOfRangeException.ThrowIfNegative(n, $"Parameter {nameof(n)} cannot be negative.");
 
@@ -132,6 +133,7 @@
 		/// <returns>
 		///		<para>An <see cref="int"/> representing the <see langword="value"/> of the highest randomly rolled face of the current <see cref="Die"/> instance.</para>
 		///	</returns>
+		///	<exception cref="ArgumentOutOfRangeException"></exception>
 		public int Advantage(int n) {
 			return Roll(n).Max();
 		}
@@ -153,6 +155,7 @@
 		/// <returns>
 		///		<para>An <see cref="int"/> representing the <see langword="value"/> of the lowest randomly rolled face of the current <see cref="Die"/> instance.</para>
 		///	</returns>
+		///	<exception cref="ArgumentOutOfRangeException"></exception>
 		public int Disadvantage(int n) {
 			return Roll(n).Min();
 		}
@@ -164,6 +167,7 @@
 		/// <returns>
 		///		<para>An <see cref="int"/> representing the <see langword="value"/> of the randomly rolled face of the current <see cref="Die"/> instance.</para>
 		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
 		public int ReRoll(int value) {
 			return ReRoll(value, true);
 		}
@@ -179,8 +183,8 @@
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException"></exception>
 		public int ReRoll(int value, bool once) {
-			if (value > Size && !once) {
-				throw new ArgumentOutOfRangeException($"Parameter {nameof(value)} cannot exceed {nameof(Size)}.{Environment.NewLine}{nameof(Size)}: {Size}");
+			if (value >= Faces.Max()) {
+				throw new ArgumentOutOfRangeException($"Parameter {nameof(value)} cannot be greater than or equal to {nameof(Faces)} maximum value.{Environment.NewLine}{nameof(Faces)} Max Value: {Faces.Max()}");
 			}
 
 			int roll = Roll();
@@ -198,6 +202,39 @@
 			} while (!once);
 
 			return roll;
+		}
+
+		/// <summary>
+		///		<para>Rolls the current <see cref="Die"/> instance, rolling it an additional time each time it rolls its maximum face value.</para>
+		/// </summary>
+		/// <returns>
+		///		<para>A <see cref="List{T}"/> of <see cref="int"/>s representing the <see langword="values"/> of the randomly rolled faces of the current <see cref="Die"/> instance.</para>
+		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		public List<int> Explode() {
+			return Explode(Faces.Max());
+		}
+
+		/// <summary>
+		///		<para>Rolls the current <see cref="Die"/> instance, rolling it an additonal time each time it rolls a face of <paramref name="value"/> or greater.</para>
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns>
+		///		<para>A <see cref="List{T}"/> of <see cref="int"/>s representing the <see langword="values"/> of the randomly rolled faces of the current <see cref="Die"/> instance.</para>
+		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		public List<int> Explode(int value) {
+			if (value <= Faces.Min()) {
+				throw new ArgumentOutOfRangeException($"Parameter {nameof(value)} cannot be less than or equal to {nameof(Faces)} minimum value.{Environment.NewLine}{nameof(Faces)} Min Value: {Faces.Min()}");
+			}
+
+			List<int> rolls = [];
+
+			do {
+				rolls.Add(Roll());
+			} while (rolls.Last() >= value);
+
+			return rolls;
 		}
 		#endregion
 
