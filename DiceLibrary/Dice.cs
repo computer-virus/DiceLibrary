@@ -9,14 +9,19 @@
 		/// </summary>
 		/// <param name="n"></param>
 		/// <param name="size"></param>
+		/// <returns>
+		///		<para>The current <see cref="Dice"/> instance in order to simplify its use in instantiation.</para>
+		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException"></exception>
-		public void Add(int n, int size) {
+		public Dice Add(int n, int size) {
 			ArgumentOutOfRangeException.ThrowIfNegative(n, $"Parameter {nameof(n)} cannot be negative.");
 			ArgumentOutOfRangeException.ThrowIfLessThan(size, 2, $"Parameter {nameof(size)} cannot be less than 2.");
 
 			for (int i = 0; i < n; i++) {
 				Add(new D(size));
 			}
+
+			return this;
 		}
 		#endregion
 

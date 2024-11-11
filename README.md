@@ -23,8 +23,7 @@ namespace Lv5AssassinRogueDemo {
 			Die d20 = new D(20);
 
 			Dice weaponDamage = [new D(8)];
-			Dice sneakAttackDamage = [];
-			sneakAttackDamage.Add(3, 6);
+			Dice sneakAttackDamage = new Dice().Add(3, 6);
 
 			int toHit;
 			if (isSurprising) {
