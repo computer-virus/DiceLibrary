@@ -1,44 +1,34 @@
 ﻿namespace DiceLibrary {
 	/// <summary>
-	///		<para>Represents a rollable die.</para>
+	///		<para>Represents a rollable die with a custom arrangement of faces.</para>
 	/// </summary>
-	public abstract class Die {
+	public class Die {
 		#region Data Members
-		private int? _size;
-		private int[] _faces = [];
-		private int? _seed;
-		private Random? _random;
+		private List<int> faces = [];
+		private Random _random = new();
 		#endregion
 
 		#region Properties
+		/// <summary>
+		///		<para>An <see cref="List{T}"/> of <see cref="int"/>s representation of the faces of the current <see cref="Die"/> instance.</para>
+		/// </summary>
+		public List<int> Faces {
+			get {
+				return faces;
+			}
+
+			set {
+				ArgumentNullException.ThrowIfNull($"{nameof(Faces)} cannot be assigned to {value}.");
+				faces = value;
+			}
+		}
+
 		/// <summary>
 		///		<para>An <see cref="int"/> representation of the number of faces of the current <see cref="Die"/> instance.</para>
 		/// </summary>
 		public int Size {
 			get {
-				return _size ?? throw new InvalidOperationException($"{nameof(Size)} must be assigned a value before it is accessed.");
-			}
-
-			private set {
-				if (_size != null) {
-					throw new InvalidOperationException($"Cannot reassign the value of {nameof(Size)} once it has been assigned.");
-				}
-
-				if (value < 2) {
-					throw new ArgumentOutOfRangeException($"{nameof(Size)} cannot be assigned a value that's less than 2.{Environment.NewLine}Assigned Value: {value}");
-				}
-
-				_size = value;
-				_faces = new int[value];
-			}
-		}
-
-		/// <summary>
-		///		<para>An <see cref="int"/>[] representation of the faces of the current <see cref="Die"/> instance.</para>
-		/// </summary>
-		public int[] Faces {
-			get {
-				return _faces;
+				return Faces.Count;
 			}
 		}
 
@@ -46,41 +36,37 @@
 		///		<para>The seed used to determine the current <see cref="Die"/> instance's random results.</para>
 		/// </summary>
 		public int Seed {
-			get {
-				return _seed ?? throw new InvalidOperationException($"{nameof(Seed)} must be assigned a value before it is accessed.");
-			}
-
 			set {
-				ArgumentNullException.ThrowIfNull(value, $"{nameof(Seed)} cannot be assigned to {value}.");
-				_seed = value;
 				_random = new(value);
 			}
 		}
 
-		private Random Random {
+		/// <summary>
+		///		<para>The <see cref="System.Random"/> class used to determine the current <see cref="Die"/> instance's random results.</para>
+		/// </summary>
+		protected Random Random {
 			get {
-				return _random ?? throw new InvalidOperationException($"{nameof(Random)} must be assigned a value before it is accessed.");
+				return _random;
 			}
 		}
 		#endregion
 
 		#region Constructors
 		/// <summary>
-		///		<para>Initializes a new instance of the <see cref="Die"/> class, using the specified <paramref name="size"/>.</para>
+		///		<para>Initializes a new instance of the <see cref="Die"/> class, using the specified <paramref name="faces"/>.</para>
 		/// </summary>
-		/// <param name="size"></param>
-		protected Die(int size) {
-			Size = size;
-			Seed = new Random().Next(int.MinValue, int.MaxValue);
+		/// <param name="faces"></param>
+		public Die(List<int> faces) {
+			Faces = faces;
 		}
 
 		/// <summary>
-		///		<para>Initializes a new instance of the <see cref="Die"/> class, using the specified <paramref name="size"/> and <paramref name="seed"/>.</para>
+		///		<para>Initializes a new instance of the <see cref="Die"/> class, using the specified <paramref name="faces"/> and <paramref name="seed"/>.</para>
 		/// </summary>
-		/// <param name="size"></param>
+		/// <param name="faces"></param>
 		/// <param name="seed"></param>
-		protected Die(int size, int seed) {
-			Size = size;
+		public Die(List<int> faces, int seed) {
+			Faces = faces;
 			Seed = seed;
 		}
 		#endregion
@@ -93,7 +79,7 @@
 		/// <returns>
 		///		<para>An <see cref="int"/> representing the <see langword="value"/> of the randomly rolled face of the current <see cref="Die"/> instance.</para>
 		/// </returns>
-		public int Roll() {
+		public virtual int Roll() {
 			return Faces[Random.Next(Size)];
 		}
 
@@ -330,34 +316,20 @@
 		/// <exception cref="ArgumentNullException"></exception>
 		/// <exception cref="FormatException"></exception>
 		public static Die Parse(string s) {
-			ArgumentNullException.ThrowIfNull(s, $"Parameter {nameof(s)} cannot be null.");
+			ArgumentNullException.ThrowIfNullOrWhiteSpace(s, $"Parameter {nameof(s)} cannot be null, empty, or whitespace.");
 
-			string[] values = s.Split(':');
-
-			if (values.Length != 3) {
+			string[] values = s.Split(',');
+			List<int> faces = [];
+			try {
+				foreach (string faceVal in values) {
+					faces.Add(int.Parse(faceVal.Trim()));
+				}
+			} catch {
 				throw new FormatException($"Parameter {nameof(s)} was not in the right format.");
 			}
 
-			int size = int.Parse(values[0]);
-
-			int[] faces = new int[size];
-			string[] faceValues = values[1].Split(',');
-			for (int i = 0; i < size; i++) {
-				faces[i] = int.Parse(faceValues[i]);
-			}
-
-			int seed = int.Parse(values[2]);
-
-			return new CustomDie(faces, seed);
+			return new Die(faces);
 		}
-		#endregion
-
-		#region Abstract Methods
-		/// <summary>
-		///		<para>Sets up the current <see cref="Die"/> instance's faces for use in rolling.</para>
-		///		<para>This <see langword="method"/> must be called in the <see langword="derived class"/>' constructor.</para>
-		/// </summary>
-		protected abstract void SetUpFaces();
 		#endregion
 
 		#region Method Overrides
@@ -368,7 +340,7 @@
 		///		<para>A <see cref="string"/> that represents the current <see cref="Die"/> instance.</para>
 		/// </returns>
 		public override string ToString() {
-			return $"{Size}:{string.Join(',', Faces)}:{Seed}";
+			return $"{string.Join(',', Faces)}";
 		}
 		#endregion
 	}

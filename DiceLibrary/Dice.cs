@@ -5,7 +5,7 @@
 	public class Dice : List<Die> {
 		#region Die Population Methods
 		/// <summary>
-		///		<para>Adds <paramref name="n"/> <see langword="new"/> instances of <see cref="D"/>(<paramref name="size"/>) to the end of the current <see cref="Dice"/> instance.</para>
+		///		<para>Adds <paramref name="n"/> new instances of <see cref="D"/>(<paramref name="size"/>) to the end of the current <see cref="Dice"/> instance.</para>
 		/// </summary>
 		/// <param name="n"></param>
 		/// <param name="size"></param>

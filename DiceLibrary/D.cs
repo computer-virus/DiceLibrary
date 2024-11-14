@@ -8,28 +8,25 @@
 		///		<para>Initializes a new instance of the <see cref="D"/> class, using the specified <paramref name="size"/>.</para>
 		/// </summary>
 		/// <param name="size"></param>
-		public D(int size) : base(size) {
-			SetUpFaces();
-		}
+		public D(int size) : base(SetUpFaces(size)) { }
 
 		/// <summary>
 		///		<para>Initializes a new instance of the <see cref="D"/> class, using the specified <paramref name="size"/> and <paramref name="seed"/>.</para>
 		/// </summary>
 		/// <param name="size"></param>
 		/// <param name="seed"></param>
-		public D(int size, int seed) : base(size, seed) {
-			SetUpFaces();
-		}
+		public D(int size, int seed) : base(SetUpFaces(size), seed) { }
 		#endregion
 
-		#region Method Overrides
-		/// <summary>
-		///		<para>Sets up the current <see cref="D"/> instance's faces for use in rolling.</para>
-		/// </summary>
-		protected override void SetUpFaces() {
-			for (int i = 0; i < Faces.Length; i++) {
-				Faces[i] = i + 1;
+		#region Methods
+		private static List<int> SetUpFaces(int size) {
+			List<int> list = [];	
+
+			for (int i = 0; i < size; i++) {
+				list.Add(i + 1);
 			}
+
+			return list;
 		}
 		#endregion
 	}
