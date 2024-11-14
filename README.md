@@ -5,7 +5,7 @@ A small library consisting of a couple of classes for the handling dice and dice
 - Dice: A list of of the Die class with extra functionality
 - Die: A rollable die with a custom arrangement of faces
 - D (derived from Die): A rollable die with the standard arrangement of faces
-- CustomDie (derived from Die): A rollable die with a custom arrangement of faces and probabilities to roll said faces.
+- CustomDie (derived from Die): A rollable die with a custom arrangement of faces and probabilities to roll said faces
 
 ## Code Example
 ```cs
