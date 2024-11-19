@@ -33,6 +33,33 @@
 		}
 
 		/// <summary>
+		///		<para>An <see cref="int"/> representation of the highest value in the faces of the current <see cref="Die"/> instance.</para>
+		/// </summary>
+		public int Max {
+			get {
+				return Faces.Max();
+			}
+		}
+
+		/// <summary>
+		///		<para>An <see cref="int"/> representation of the lowest value in the faces of the current <see cref="Die"/> instance.</para>
+		/// </summary>
+		public int Min {
+			get {
+				return Faces.Min();
+			}
+		}
+
+		/// <summary>
+		///		<para>An <see cref="double"/> representation of the average value in the faces of the current <see cref="Die"/> instance.</para>
+		/// </summary>
+		public double Average {
+			get {
+				return Faces.Average();
+			}
+		}
+
+		/// <summary>
 		///		<para>The seed used to determine the current <see cref="Die"/> instance's random results.</para>
 		/// </summary>
 		public int Seed {
