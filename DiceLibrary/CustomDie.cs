@@ -127,50 +127,6 @@
 		public override string ToString() {
 			return $"{base.ToString()}:{string.Join(',', Weights)}";
 		}
-
-		/// <summary>
-		///		<para>Converts a <see cref="string"/> representation of a die to its <see cref="CustomDie"/> equivalent.</para>
-		/// </summary>
-		/// <param name="s"></param>
-		/// <returns>
-		///		<para>A <see cref="CustomDie"/> equivalent to the die contained in <paramref name="s"/>.</para>
-		/// </returns>
-		/// <exception cref="ArgumentNullException"></exception>
-		/// <exception cref="FormatException"></exception>
-		new public static CustomDie Parse(string s) {
-			ArgumentNullException.ThrowIfNullOrWhiteSpace(s, $"Parameter {nameof(s)} cannot be null, empty, or whitespace.");
-
-			string[] sections = s.Split(':');
-			if (sections.Length != 2) {
-				throw new FormatException($"Parameter {nameof(s)} was not in the right format.");
-			}
-
-			#region Section 0
-			string[] faceStrings = sections[0].Split(',');
-			List<int> faces = [];
-			try {
-				foreach (string faceString in faceStrings) {
-					faces.Add(int.Parse(faceString.Trim()));
-				}
-			} catch {
-				throw new FormatException($"Parameter {nameof(s)} was not in the right format.");
-			}
-			#endregion
-
-			#region Section 1
-			string[] weightStrings = sections[1].Split(',');
-			List<int> weights = [];
-			try {
-				foreach (string weightString in weightStrings) {
-					weights.Add(int.Parse(weightString.Trim()));
-				}
-			} catch {
-				throw new FormatException($"Parameter {nameof(s)} was not in the right format.");
-			}
-			#endregion
-
-			return new CustomDie(faces, weights);
-		}
 		#endregion
 	}
 }

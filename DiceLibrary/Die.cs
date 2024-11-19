@@ -263,7 +263,7 @@
 		/// </returns>
 		/// <exception cref="ArgumentOutOfRangeException"></exception>
 		public List<int> KeepHighest(int n, int x) {
-			ArgumentOutOfRangeException.ThrowIfNegative(n, $"Parameter {nameof(n)} cannot be negative.");	
+			ArgumentOutOfRangeException.ThrowIfNegative(n, $"Parameter {nameof(n)} cannot be negative.");
 			ArgumentOutOfRangeException.ThrowIfNegative(x, $"Parameter {nameof(x)} cannot be negative.");
 			ArgumentOutOfRangeException.ThrowIfGreaterThan(x, n, $"Parameter {nameof(x)} cannot be greater than parameter {nameof(n)}.");
 
@@ -318,17 +318,47 @@
 		public static Die Parse(string s) {
 			ArgumentNullException.ThrowIfNullOrWhiteSpace(s, $"Parameter {nameof(s)} cannot be null, empty, or whitespace.");
 
-			string[] values = s.Split(',');
+			List<string> sections = [.. s.Split(':')];
 			List<int> faces = [];
-			try {
-				foreach (string faceVal in values) {
-					faces.Add(int.Parse(faceVal.Trim()));
-				}
-			} catch {
-				throw new FormatException($"Parameter {nameof(s)} was not in the right format.");
-			}
+			List<int> weights = [];
 
+			#region Sections Count Logic
+			switch (sections.Count) {
+				case 2:
+					string[] weightValues = sections[1].Split(',');
+					try {
+						foreach (string value in weightValues) {
+							weights.Add(int.Parse(value.Trim()));
+						}
+					} catch {
+						throw new FormatException($"Parameter {nameof(s)} was not in the right format.");
+					}
+					goto case 1;
+				case 1:
+					string[] faceValues = sections[0].Split(',');
+					try {
+						foreach (string value in faceValues) {
+							faces.Add(int.Parse(value.Trim()));
+						}
+					} catch {
+						throw new FormatException($"Parameter {nameof(s)} was not in the right format.");
+					}
+					break;
+				default:
+					throw new FormatException($"Parameter {nameof(s)} was not in the right format.");
+			}
+			#endregion
+
+			#region Return Logic
+			if (weights.Count > 1) {
+				try {
+					return new CustomDie(faces, weights);
+				} catch {
+					throw new FormatException($"Parameter {nameof(s)} was not in the right format.");
+				}
+			}
 			return new Die(faces);
+			#endregion
 		}
 		#endregion
 
