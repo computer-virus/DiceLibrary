@@ -32,7 +32,7 @@ namespace Lv5AssassinRogueDemo {
 				toHit = d20.Roll() + modifier + proficiencyBonus;
 			}
 
-			bool crit = isSurprising || toHit == d20.Faces.Max() + modifier + proficiencyBonus;
+			bool crit = isSurprising || toHit == d20.Max + modifier + proficiencyBonus;
 			if (crit) {
 				weaponDamage = weaponDamage.Double();
 				sneakAttackDamage = sneakAttackDamage.Double();
