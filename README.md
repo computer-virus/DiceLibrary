@@ -34,8 +34,8 @@ namespace Lv5AssassinRogueDemo {
 
 			bool crit = isSurprising || toHit == d20.Faces.Max() + modifier + proficiencyBonus;
 			if (crit) {
-				weaponDamage.Add(weaponDamage.Count, weaponDamage[0].Size);
-				sneakAttackDamage.Add(sneakAttackDamage.Count, sneakAttackDamage[0].Size);
+				weaponDamage = weaponDamage.Double();
+				sneakAttackDamage = sneakAttackDamage.Double();
 			}
 
 			int damage = weaponDamage.Roll().Sum() + modifier;

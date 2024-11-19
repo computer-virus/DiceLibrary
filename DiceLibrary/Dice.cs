@@ -23,6 +23,21 @@
 
 			return this;
 		}
+
+		/// <summary>
+		///		<para>Creates a new instance of the <see cref="Dice"/> class with double the current <see cref="Dice"/> instance's <see cref="Die"/> instances.</para>
+		/// </summary>
+		/// <returns>A new instance of the <see cref="Dice"/> instance containing twice as many instances of the <see cref="Die"/> clas as the current <see cref="Die"/> instances.</returns>
+		public Dice Double() {
+			Dice dice = [];
+
+			foreach (Die die in this) {
+				dice.Add(new Die(die.Faces));
+				dice.Add(new Die(die.Faces));
+			}
+
+			return dice;
+		}
 		#endregion
 
 		#region Roll Methods
