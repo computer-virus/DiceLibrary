@@ -104,6 +104,10 @@
 				throw new InvalidDataException($"Instance data was not properly synced.\nPlease use {nameof(CustomDie)} specific methods when modifying a {nameof(CustomDie)}.");
 			}
 
+			if (Faces.Count < 1) {
+				throw new ArgumentOutOfRangeException($"Cannot a {nameof(CustomDie)} with {Faces.Count} {nameof(Faces)}.");
+			}
+
 			int max = Weights.Sum();
 			int rolledWeight = Random.Next(max);
 

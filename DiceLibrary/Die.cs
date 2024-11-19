@@ -80,6 +80,10 @@
 		///		<para>An <see cref="int"/> representing the <see langword="value"/> of the randomly rolled face of the current <see cref="Die"/> instance.</para>
 		/// </returns>
 		public virtual int Roll() {
+			if (Faces.Count < 1) {
+				throw new ArgumentOutOfRangeException($"Cannot a {nameof(Die)} with {Faces.Count} {nameof(Faces)}.");
+			}
+
 			return Faces[Random.Next(Size)];
 		}
 
