@@ -4,7 +4,7 @@
 	/// </summary>
 	public class Die {
 		#region Data Members
-		private List<int> faces = [];
+		private List<int> _faces = [];
 		private Random _random = new();
 		#endregion
 
@@ -14,12 +14,12 @@
 		/// </summary>
 		public List<int> Faces {
 			get {
-				return faces;
+				return _faces;
 			}
 
 			set {
 				ArgumentNullException.ThrowIfNull($"{nameof(Faces)} cannot be assigned to {value}.");
-				faces = value;
+				_faces = value;
 			}
 		}
 
