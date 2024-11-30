@@ -2,9 +2,9 @@
 A small library consisting of a couple of classes for the handling dice and dice rolling.
 
 ## Available Classes
-- Die<T>: A simpler, rollable die with a custom arrangement of <T> type faces
-- Dice<T>: A list of the Die<T> class with extra functionality
-- NumberDie (derived from Die<int>): A rollable die with a custom arrangement of faces
+- Die\<T>: A simpler, rollable die with a custom arrangement of \<T> type faces
+- Dice\<T>: A list of the Die\<T> class with extra functionality
+- NumberDie (derived from Die\<int>): A rollable die with a custom arrangement of faces
 - D (derived from NumberDie): A rollable die with the standard arrangement of faces
 - CustomDie (derived from NumberDie): A rollable die with a custom arrangement of faces and probabilities to roll said faces
 - NumberDice: A list of of the NumberDie class with extra functionality
