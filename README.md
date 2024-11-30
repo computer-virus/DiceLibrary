@@ -1,5 +1,5 @@
 # DiceLibrary
-A small library consisting of a couple of classes for the handling dice and dice rolling.
+A small library consisting of a couple of classes for the handling of dice and dice rolling.
 
 ## Available Classes
 - Die\<T>: A simpler, rollable die with a custom arrangement of \<T> type faces
