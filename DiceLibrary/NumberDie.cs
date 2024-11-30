@@ -1,4 +1,4 @@
-﻿namespace DiceLibrary {
+namespace DiceLibrary {
 	/// <summary>
 	///		<para>Represents a rollable die with a custom arrangement of faces.</para>
 	/// </summary>
@@ -271,7 +271,7 @@
 			#region Sections Count Logic
 			switch (sections.Count) {
 				case 3:
-					string[] weightValues = sections[1].Split(',');
+					string[] weightValues = sections[2].Split(',');
 					try {
 						foreach (string value in weightValues) {
 							weights.Add(int.Parse(value.Trim()));
@@ -281,7 +281,7 @@
 					}
 					goto case 2;
 				case 2:
-					string[] faceValues = sections[0].Split(',');
+					string[] faceValues = sections[1].Split(',');
 					try {
 						foreach (string value in faceValues) {
 							faces.Add(int.Parse(value.Trim()));
