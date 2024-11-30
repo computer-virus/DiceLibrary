@@ -7,7 +7,7 @@ A small library consisting of a couple of classes for the handling dice and dice
 - NumberDie (derived from Die\<int>): A rollable die with a custom arrangement of faces
 - D (derived from NumberDie): A rollable die with the standard arrangement of faces
 - CustomDie (derived from NumberDie): A rollable die with a custom arrangement of faces and probabilities to roll said faces
-- NumberDice: A list of of the NumberDie class with extra functionality
+- NumberDice: A list of the NumberDie class with extra functionality
 
 ## Code Example
 ```cs
