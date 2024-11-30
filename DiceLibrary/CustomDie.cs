@@ -2,7 +2,7 @@
 	/// <summary>
 	///		<para>Represents a rollable die with a custom arrangement of faces and probabilities to roll said faces.</para>
 	/// </summary>
-	public class CustomDie : Die {
+	public class CustomDie : NumberDie {
 		#region Data Members
 		private List<int> _weights = [];
 		#endregion

@@ -2,10 +2,12 @@
 A small library consisting of a couple of classes for the handling dice and dice rolling.
 
 ## Available Classes
-- Dice: A list of of the Die class with extra functionality
-- Die: A rollable die with a custom arrangement of faces
-- D (derived from Die): A rollable die with the standard arrangement of faces
-- CustomDie (derived from Die): A rollable die with a custom arrangement of faces and probabilities to roll said faces
+- Die<T>: A simpler, rollable die with a custom arrangement of <T> type faces
+- Dice<T>: A list of the Die<T> class with extra functionality
+- NumberDie (derived from Die<int>): A rollable die with a custom arrangement of faces
+- D (derived from NumberDie): A rollable die with the standard arrangement of faces
+- CustomDie (derived from NumberDie): A rollable die with a custom arrangement of faces and probabilities to roll said faces
+- NumberDice: A list of of the NumberDie class with extra functionality
 
 ## Code Example
 ```cs
@@ -20,10 +22,10 @@ namespace Lv5AssassinRogueDemo {
 			int proficiencyBonus = 3;
 			int modifier = 5;
 
-			Die d20 = new D(20);
+			NumberDie d20 = new D(20);
 
-			Dice weaponDamage = [new D(8)];
-			Dice sneakAttackDamage = new Dice().Add(3, 6);
+			NumberDice weaponDamage = [new D(8)];
+			NumberDice sneakAttackDamage = new Dice().Add(3, 6);
 
 			int toHit;
 			if (isSurprising) {

@@ -2,7 +2,7 @@
 	/// <summary>
 	///		<para>Represents a rollable die with the standard arrangement of faces.</para>
 	/// </summary>
-	public class D : Die {
+	public class D : NumberDie {
 		#region Constructors
 		/// <summary>
 		///		<para>Initializes a new instance of the <see cref="D"/> class, using the specified <paramref name="size"/>.</para>
