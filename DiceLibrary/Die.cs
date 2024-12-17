@@ -77,7 +77,7 @@
 		///		<para>Rolls the current <see cref="Die{T}"/> instance.</para>
 		/// </summary>
 		/// <returns>
-		///		<para>A <typeparamref name="T"/> representing the <see langword="value"/> of the randomly rolled face of the current <see cref="NumberDie"/> instance.</para>
+		///		<para>A <typeparamref name="T"/> representing the <see langword="value"/> of the randomly rolled face of the current <see cref="Die{T}"/> instance.</para>
 		/// </returns>
 		public virtual T Roll() {
 			if (Faces.Count < 1) {
