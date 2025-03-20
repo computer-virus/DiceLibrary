@@ -1,125 +1,237 @@
-﻿namespace DiceLibrary {
-	/// <summary>
-	///		<para>Represents a rollable die with a custom arrangement of faces and probabilities to roll said faces.</para>
-	/// </summary>
-	public class CustomDie : NumberDie {
-		#region Data Members
-		private List<int> _weights = [];
-		#endregion
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
+namespace DiceLibrary {
+	/// <summary>
+	///		<para>A representation of a rollable die with a custom arrangement of <see cref="int"/> type faces with more functionality than its <see cref="GenericDie{T}"/> counterpart.</para>
+	/// </summary>
+	public class CustomDie : GenericDie<int> {
 		#region Properties
 		/// <summary>
-		///		<para>A <see cref="List{T}"/> of <see cref="int"/>s representing the weight of each of the current <see cref="CustomDie"/> instance's faces.</para>
+		///		<para>Gets an <see cref="int"/> representation of the highest value of the faces on the current <see cref="CustomDie"/> instance.</para>
 		/// </summary>
-		public List<int> Weights {
+		[JsonIgnore]
+		public int Max {
 			get {
-				return _weights;
+				return Faces.Max();
 			}
+		}
 
-			set {
-				ArgumentNullException.ThrowIfNull($"{nameof(Weights)} cannot be assigned to {value}.");
+		/// <summary>
+		///		<para>Gets an <see cref="int"/> representation of the lowest value of the faces on the current <see cref="CustomDie"/> instance.</para>
+		/// </summary>
+		[JsonIgnore]
+		public int Min {
+			get {
+				return Faces.Min();
+			}
+		}
 
-				if (value.Count != Size) {
-					throw new FormatException($"{nameof(Weights)} must contain {Size} values.\nCurrently contains {value.Count} values.");
-				}
-
-				if (value.Any(x => x < 0)) {
-					throw new ArgumentOutOfRangeException($"{nameof(Weights)} cannot have negative values.\nOffending values: {string.Join(", ", value.Where(x => x < 0))}");
-				}
-
-				_weights = value;
+		/// <summary>
+		///		<para>Gets a <see cref="double"/> representation of the average value of the faces on the current <see cref="CustomDie"/> instance.</para>
+		/// </summary>
+		[JsonIgnore]
+		public double Average {
+			get {
+				return Faces.Average();
 			}
 		}
 		#endregion
 
 		#region Constructors
 		/// <summary>
-		///		<para>Initializes a new instance of the <see cref="CustomDie"/> class, using the specified <paramref name="faces"/> and <paramref name="weights"/>.</para>
+		///		<para>Initializes a new instance of the <see cref="CustomDie"/> class, using the specified <paramref name="faces"/>.</para>
 		/// </summary>
 		/// <param name="faces"></param>
-		/// <param name="weights"></param>
-		public CustomDie(List<int> faces, List<int> weights) : base(faces) {
-			Weights = weights;
-		}
+		public CustomDie(List<int> faces) : base(faces) { }
 
 		/// <summary>
-		///		<para>Initializes a new instance of the <see cref="CustomDie"/> class, using the specified <paramref name="faces"/>, <paramref name="weights"/>, and <paramref name="seed"/>.</para>
+		///		<para>Initializes a new instance of the <see cref="CustomDie"/> class, using the specified <paramref name="faces"/> and <paramref name="seed"/>.</para>
 		/// </summary>
 		/// <param name="faces"></param>
-		/// <param name="weights"></param>
 		/// <param name="seed"></param>
-		public CustomDie(List<int> faces, List<int> weights, int seed) : base(faces, seed) {
-			Weights = weights;
-		}
+		[JsonConstructorAttribute]
+		public CustomDie(List<int> faces, int? seed) : base(faces, seed) { }
 		#endregion
 
-		#region Methods
+		#region Roll Methods
 		/// <summary>
-		///		<para>Adds a new <paramref name="face"/> and <paramref name="weight"/> to the current <see cref="CustomDie"/> instance.</para>
+		///		<para>Rolls the current <see cref="CustomDie"/> instance, using the specified rolling <paramref name="method"/>.</para>
 		/// </summary>
-		/// <param name="face"></param>
-		/// <param name="weight"></param>
-		/// <returns>
-		///		<para>The current <see cref="CustomDie"/> instance in order to simplify its use in instantiation.</para>
-		/// </returns>
-		/// <exception cref="ArgumentOutOfRangeException"></exception>
-		public CustomDie AddFace(int face, int weight) {
-			ArgumentOutOfRangeException.ThrowIfNegative(weight, $"Parameter {nameof(weight)} cannot be negative.");
-
-			Faces.Add(face);
-			Weights.Add(weight);
-
-			return this;
-		}
-
-		/// <summary>
-		///		<para>Removes the face and weight at the given <paramref name="index"/> of the current <see cref="CustomDie"/> instance.</para>
-		/// </summary>
-		/// <param name="index"></param>
-		/// <returns>
-		///		<para>The current <see cref="CustomDie"/> instance in order to simplify its use in instantiation.</para>
-		/// </returns>
-		/// <exception cref="IndexOutOfRangeException"></exception>
-		public CustomDie RemoveFace(int index) {
-			if (index < 0 || index >= Size) {
-				throw new IndexOutOfRangeException($"Parameter {nameof(index)} must be a value between 0 and {Size}, upper bound exclusive.");
-			}
-
-			Faces.RemoveAt(index);
-			Weights.RemoveAt(index);
-
-			return this;
-		}
-		#endregion
-
-		#region Method Overrides
-		/// <summary>
-		///		<para>Rolls the current <see cref="CustomDie"/> instance, taking into account the weights of its faces.</para>
-		/// </summary>
+		/// <param name="method"></param>
 		/// <returns>
 		///		<para>An <see cref="int"/> representing the <see langword="value"/> of the randomly rolled face of the current <see cref="CustomDie"/> instance.</para>
 		/// </returns>
-		public override int Roll() {
-			if (Weights.Count != Size || Weights.Any(x => x < 0)) {
-				throw new InvalidDataException($"Instance data was not properly synced.\nPlease use {nameof(CustomDie)} specific methods when modifying a {nameof(CustomDie)}.");
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		/// <exception cref="ArgumentNullException"></exception>
+		/// <exception cref="InvalidOperationException"></exception>
+		public virtual int Roll(RollMethod method) {
+			ArgumentOutOfRangeException.ThrowIfLessThan(Size, 1, $"Cannot roll a {nameof(CustomDie)} with {Size} {nameof(Faces)}.");
+
+			if (!Enum.IsDefined(typeof(RollMethod), method)) {
+				throw new ArgumentNullException($"Cannot roll a {nameof(CustomDie)} with unrecognized {nameof(RollMethod)} \"{method}\".");
 			}
 
-			if (Faces.Count < 1) {
-				throw new ArgumentOutOfRangeException($"Cannot a {nameof(CustomDie)} with {Faces.Count} {nameof(Faces)}.");
+			switch (method) {
+				case RollMethod.Advantage:
+					return Roll(2).Max();
+				case RollMethod.Disadvantage:
+					return Roll(2).Min();
+				case RollMethod.Exploding:
+					if (Min == Max) {
+						throw new InvalidOperationException($"Using the {nameof(RollMethod)} \"{method}\" on the current {nameof(CustomDie)} would cause an infinite loop.");
+					}
+
+					List<int> rolls = [];
+
+					do {
+						rolls.Add(Roll());
+					} while (rolls.Last() == Max);
+
+					return rolls.Sum();
+				default:
+					return Roll();
+			}
+		}
+
+		/// <summary>
+		///		<para>Rolls the current <see cref="CustomDie"/> instance <paramref name="n"/> times, using the specified rolling <paramref name="method"/>.</para>
+		/// </summary>
+		/// <param name="n"></param>
+		/// <param name="method"></param>
+		/// <returns>
+		///		<para>A <see cref="List{T}"/> of <see cref="int"/>s representing the <see langword="values"/> of the randomly rolled faces of the current <see cref="CustomDie"/> instance.</para>
+		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		/// <exception cref="ArgumentNullException"></exception>
+		/// <exception cref="InvalidOperationException"></exception>
+		public virtual List<int> Roll(int n, RollMethod method) {
+			ArgumentOutOfRangeException.ThrowIfLessThan(Size, 1, $"Cannot roll a {nameof(CustomDie)} with {Size} {nameof(Faces)}.");
+			ArgumentOutOfRangeException.ThrowIfNegative(n, $"Cannot roll a {nameof(CustomDie)} {n} times.");
+
+			if (!Enum.IsDefined(typeof(RollMethod), method)) {
+				throw new ArgumentNullException($"Cannot roll a {nameof(CustomDie)} with unrecognized {nameof(RollMethod)} \"{method}\".");
 			}
 
-			int max = Weights.Sum();
-			int rolledWeight = Random.Next(max);
-
-			for (int i = 0; i < Size; i++) {
-				if (rolledWeight < Weights[i]) {
-					return Faces[i];
-				}
-
-				rolledWeight -= Weights[i];
+			if (method == RollMethod.Exploding && Max == Min) {
+				throw new InvalidOperationException($"Using the {nameof(RollMethod)} \"{method}\" on the current {nameof(CustomDie)} would cause an infinite loop.");
 			}
 
-			throw new InvalidDataException($"Instance data was not properly synced.\nPlease use {nameof(CustomDie)} specific methods when modifying a {nameof(CustomDie)}.");
+			List<int> rolls = [];
+
+			for (int i = 0; i < n; i++) {
+				rolls.Add(Roll(method));
+			}
+
+			return rolls;
+		}
+		#endregion
+
+		#region DC Methods
+		/// <summary>
+		///		<para>Rolls the current <see cref="CustomDie"/> instance and then adds the specified <paramref name="modifier"/>, checking it against the specified <paramref name="dc"/>.</para>
+		/// </summary>
+		/// <param name="dc"></param>
+		/// <param name="modifier"></param>
+		/// <returns>
+		///		<para>A <see cref="bool"/> representation of whether the roll succeeded against the <paramref name="dc"/>.</para>
+		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		public virtual bool DC(int dc, int modifier) {
+			ArgumentOutOfRangeException.ThrowIfLessThan(Size, 1, $"Cannot roll a {nameof(CustomDie)} with {Size} {nameof(Faces)}.");
+
+			return DC(dc, RollMethod.Normal, modifier, false);
+		}
+
+		/// <summary>
+		///		<para>Rolls the current <see cref="CustomDie"/> instance and then adds the specified <paramref name="modifier"/>, checking it against the specified <paramref name="dc"/>.</para>
+		/// </summary>
+		/// <param name="dc"></param>
+		/// <param name="modifier"></param>
+		/// <param name="crits"></param>
+		/// <returns>
+		///		<para>A <see cref="bool"/> representation of whether the roll succeeded against the <paramref name="dc"/>.</para>
+		///		<para>The roll automatically succeeds or fails if <paramref name="crits"/> is <see langword="true"/> and the current <see cref="CustomDie"/> instance rolls its highest or lowest value, respectively.</para>
+		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		public virtual bool DC(int dc, int modifier, bool crits) {
+			ArgumentOutOfRangeException.ThrowIfLessThan(Size, 1, $"Cannot roll a {nameof(CustomDie)} with {Size} {nameof(Faces)}.");
+
+			return DC(dc, RollMethod.Normal, modifier, crits);
+		}
+
+		/// <summary>
+		///		<para>Rolls the current <see cref="CustomDie"/> instance using the specified <paramref name="method"/> and then adds the specified <paramref name="modifier"/>, checking it against the specified <paramref name="dc"/>.</para>
+		/// </summary>
+		/// <param name="dc"></param>
+		/// <param name="method"></param>
+		/// <param name="modifier"></param>
+		/// <returns>
+		///		<para>A <see cref="bool"/> representation of whether the roll succeeded against the <paramref name="dc"/>.</para>
+		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		/// <exception cref="ArgumentNullException"></exception>
+		/// <exception cref="InvalidOperationException"></exception>
+		public virtual bool DC(int dc, RollMethod method, int modifier) {
+			ArgumentOutOfRangeException.ThrowIfLessThan(Size, 1, $"Cannot roll a {nameof(CustomDie)} with {Size} {nameof(Faces)}.");
+
+			if (!Enum.IsDefined(typeof(RollMethod), method)) {
+				throw new ArgumentNullException($"Cannot roll a {nameof(CustomDie)} with unrecognized {nameof(RollMethod)} \"{method}\".");
+			}
+
+			if (method == RollMethod.Exploding && Max == Min) {
+				throw new InvalidOperationException($"Using the {nameof(RollMethod)} \"{method}\" on the current {nameof(CustomDie)} would cause an infinite loop.");
+			}
+
+			return DC(dc, method, modifier, false);
+		}
+
+		/// <summary>
+		///		<para>Rolls the current <see cref="CustomDie"/> instance using the specified <paramref name="method"/> and then adds the specified <paramref name="modifier"/>, checking it against the specified <paramref name="dc"/>.</para>
+		/// </summary>
+		/// <param name="dc"></param>
+		/// <param name="method"></param>
+		/// <param name="modifier"></param>
+		/// <param name="crits"></param>
+		/// <returns>
+		///		<para>A <see cref="bool"/> representation of whether the roll succeeded against the <paramref name="dc"/>.</para>
+		///		<para>The roll automatically succeeds or fails if <paramref name="crits"/> is <see langword="true"/> and the current <see cref="CustomDie"/> instance rolls its highest or lowest value, respectively.</para>
+		/// </returns>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		/// <exception cref="ArgumentNullException"></exception>
+		/// <exception cref="InvalidOperationException"></exception>
+		public virtual bool DC(int dc, RollMethod method, int modifier, bool crits) {
+			ArgumentOutOfRangeException.ThrowIfLessThan(Size, 1, $"Cannot roll a {nameof(CustomDie)} with {Size} {nameof(Faces)}.");
+
+			if (!Enum.IsDefined(typeof(RollMethod), method)) {
+				throw new ArgumentNullException($"Cannot roll a {nameof(CustomDie)} with unrecognized {nameof(RollMethod)} \"{method}\".");
+			}
+
+			if (method == RollMethod.Exploding && Max == Min) {
+				throw new InvalidOperationException($"Using the {nameof(RollMethod)} \"{method}\" on the current {nameof(CustomDie)} would cause an infinite loop.");
+			}
+
+			int roll = Roll(method);
+
+			if (crits && (roll == Max || roll == Min)) {
+				return roll == Max;
+			}
+
+			return roll + modifier >= dc;
+		}
+		#endregion
+
+		#region Conversion Methods
+		/// <summary>
+		///		<para>Converts a <see cref="string"/> representation of a die to its <see cref="CustomDie"/> equivalent.</para>
+		/// </summary>
+		/// <param name="s"></param>
+		/// <returns>
+		///		<para>A <see cref="CustomDie"/> equivalent to the die contained in <paramref name="s"/>.</para>
+		/// </returns>
+		/// <exception cref="FormatException"></exception>
+		public static new CustomDie Parse(string s) {
+			return JsonSerializer.Deserialize<CustomDie>(s) ?? throw new FormatException($"Could not parse \"{s}\" into a {nameof(CustomDie)}.");
 		}
 
 		/// <summary>
@@ -128,8 +240,9 @@
 		/// <returns>
 		///		<para>A <see cref="string"/> that represents the current <see cref="CustomDie"/> instance.</para>
 		/// </returns>
+		/// <exception cref="InvalidOperationException"></exception>
 		public override string ToString() {
-			return $"{base.ToString()}:{string.Join(',', Weights)}";
+			return JsonSerializer.Serialize(this, JsonOptions) ?? throw new InvalidOperationException($"Could not parse {nameof(CustomDie)} into a string.");
 		}
 		#endregion
 	}
