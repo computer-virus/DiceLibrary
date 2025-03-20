@@ -48,7 +48,7 @@ All properties and methods available to `GenericDice<int>` are also available to
 - `virtual List<int> Roll(int n, RollMethod method)`: Rolls all of the dice in the list `n` times, using the specified `method`, returning the result. 
 
 ## Enum Documentation
-### `RollMethod` (`Enum`)
+### `RollMethod`
 Represents rolling methods for rolling a die.
 #### Values
 - `RollMethod.Normal`: Represents the standard rolling method.
